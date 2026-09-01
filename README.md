@@ -1,16 +1,8 @@
-# 🛵 NCH GPS Tracker
+# 🛵 GPS Tracker
 
 A full-stack **employee field mobility tracking** system with real-time GPS, AI-powered anomaly detection, and a natural language query assistant.
 
 Built with **React Native (Expo)** on the frontend and **Python FastAPI + LangGraph + LangChain** on the backend.
-
----
-
-## 📱 Screenshots
-
-| Admin Overview | Trip History | AI Assistant |
-|:-:|:-:|:-:|
-| Real-time stats & AI quick card | AI-flagged trips with badges | Ask plain-English questions |
 
 ---
 
@@ -53,7 +45,7 @@ Built with **React Native (Expo)** on the frontend and **Python FastAPI + LangGr
 │    AIAssistantModal.js          │      │  LangGraph Anomaly Detection    │
 │                                 │      │    Node 1: Rule-Based Check     │
 │  services/                      │      │    Node 2: LLM Reasoning        │
-│    aiService.js ─────────────── ┼──────▶                                │
+│    aiService.js ────────────────┼──────▶                                │
 │    googleSheetsService.js       │      │  LangChain NL Query             │
 │                                 │      │    Filter Extraction            │
 │  utils/                         │      │    Row Retrieval                │
@@ -114,19 +106,11 @@ Open Safari / Chrome on your phone and go to `http://<YOUR_LAN_IP>:8081`
 ```bash
 cd ai-service
 pip install -r requirements.txt
-```
-
-Copy the example env file and fill in your keys:
-```bash
-cp .env.example .env
-```
-
-Start the server:
-```bash
+cp .env.example .env   # fill in your keys
 python -m uvicorn main:app --host 0.0.0.0 --port 8000
 ```
 
-Verify it's running by opening `http://<YOUR_LAN_IP>:8000/health` — should return `{"status":"healthy"}`.
+Verify it's running: `http://<YOUR_LAN_IP>:8000/health` → should return `{"status":"healthy"}`
 
 > **Without the AI backend:** The app still works fully. Trip scanning and AI queries fall back to fast local heuristics automatically.
 
@@ -144,17 +128,17 @@ EXPO_PUBLIC_GOOGLE_SHEETS_URL=          # optional
 ```env
 OPENAI_API_KEY=your_openai_key_here     # optional — enables LLM reasoning
 GOOGLE_SHEET_ID=                        # optional — enables Sheets sync
-GOOGLE_SERVICE_ACCOUNT_FILE=service_account.json   # optional
+GOOGLE_SERVICE_ACCOUNT_FILE=service_account.json
 ```
 
-> The AI backend runs fully without any API keys — it uses a deterministic rule-based fallback for all anomaly detection and NL queries.
+> The AI backend runs fully without any API keys using a deterministic rule-based fallback.
 
 ---
 
 ## 📂 Project Structure
 
 ```
-NCH-GPS-Tracker/
+GPS-Tracker/
 ├── screens/
 │   ├── admin/
 │   │   ├── AdminOverviewScreen.js   # Overview stats, AI quick card
@@ -188,14 +172,19 @@ NCH-GPS-Tracker/
 │   │   └── run_eval.py              # Eval harness (100% accuracy)
 │   ├── requirements.txt
 │   └── .env.example
-└── GoogleAppsScript.js              # Apps Script for Sheets sync
+├── .github/
+│   └── workflows/
+│       └── ai-tests.yml             # CI: runs pytest + eval on push
+├── GoogleAppsScript.js              # Apps Script for Sheets sync
+├── LICENSE
+└── README.md
 ```
 
 ---
 
-## 🧪 Running the Evaluation Harness
+## 🧪 Evaluation Harness
 
-The AI anomaly detection system has been validated against 23 labelled test cases:
+The AI anomaly detection was validated against 23 labelled test cases:
 
 ```bash
 cd ai-service
@@ -212,7 +201,7 @@ LLM Reasoning    : 6 cases  (26.1%)  ← contextual reasoning
 
 ---
 
-## 🔌 AI Backend API Reference
+## 🔌 API Reference
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -222,7 +211,7 @@ LLM Reasoning    : 6 cases  (26.1%)  ← contextual reasoning
 | `POST` | `/api/v1/query` | Ask a natural language question |
 | `GET` | `/api/v1/eval/run` | Run the evaluation harness |
 
-Interactive API docs available at `http://localhost:8000/docs` when the server is running.
+Interactive docs: `http://localhost:8000/docs`
 
 ---
 
@@ -238,9 +227,10 @@ Interactive API docs available at `http://localhost:8000/docs` when the server i
 | NL Query | LangChain, OpenAI |
 | Sheets Sync | gspread, Google Sheets API |
 | Data Validation | Pydantic v2 |
+| CI | GitHub Actions |
 
 ---
 
 ## 📄 License
 
-MIT License — feel free to use and adapt.
+MIT License — see [LICENSE](./LICENSE)
