@@ -1,0 +1,11 @@
+{
+  "total_cases": 23,
+  "correct_predictions": 23,
+  "accuracy_percentage": 100.0,
+  "rule_based_count": 17,
+  "rule_based_percentage": 73.91,
+  "llm_reasoning_count": 6,
+  "llm_reasoning_percentage": 26.09,
+  "misclassified_count": 0,
+  "misclassifications": []
+}

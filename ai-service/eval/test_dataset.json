@@ -1,0 +1,441 @@
+[
+  {
+    "id": "NORM_01",
+    "trip": {
+      "employee_name": "Ramesh Verma",
+      "employee_id": "EMP101",
+      "bike_number": "MH-02-AB-1111",
+      "date": "2026-09-01",
+      "out_time": "09:30",
+      "in_time": "10:15",
+      "duration_minutes": 45.0,
+      "distance_km": 15.0,
+      "historical_avg_km": 35.0
+    },
+    "expected_flag": "normal",
+    "expected_node": "rule_based",
+    "description": "Standard city delivery trip at 20 km/h average speed."
+  },
+  {
+    "id": "NORM_02",
+    "trip": {
+      "employee_name": "Suresh Nair",
+      "employee_id": "EMP102",
+      "bike_number": "MH-02-AB-2222",
+      "date": "2026-09-01",
+      "out_time": "11:00",
+      "in_time": "12:30",
+      "duration_minutes": 90.0,
+      "distance_km": 40.0,
+      "historical_avg_km": 45.0
+    },
+    "expected_flag": "normal",
+    "expected_node": "rule_based",
+    "description": "Suburban travel at 26.67 km/h."
+  },
+  {
+    "id": "NORM_03",
+    "trip": {
+      "employee_name": "Ananya Roy",
+      "employee_id": "EMP103",
+      "bike_number": "DL-04-CD-3333",
+      "date": "2026-09-01",
+      "out_time": "14:00",
+      "in_time": "14:30",
+      "duration_minutes": 30.0,
+      "distance_km": 8.0,
+      "historical_avg_km": 20.0
+    },
+    "expected_flag": "normal",
+    "expected_node": "rule_based",
+    "description": "Short local trip in heavy traffic (16 km/h)."
+  },
+  {
+    "id": "NORM_04",
+    "trip": {
+      "employee_name": "Deepak Joshi",
+      "employee_id": "EMP104",
+      "bike_number": "KA-01-EE-4444",
+      "date": "2026-09-01",
+      "out_time": "15:00",
+      "in_time": "16:00",
+      "duration_minutes": 60.0,
+      "distance_km": 35.0,
+      "historical_avg_km": 40.0
+    },
+    "expected_flag": "normal",
+    "expected_node": "rule_based",
+    "description": "Ring road transit at 35 km/h."
+  },
+  {
+    "id": "NORM_05",
+    "trip": {
+      "employee_name": "Pooja Hegde",
+      "employee_id": "EMP105",
+      "bike_number": "KA-02-FF-5555",
+      "date": "2026-09-01",
+      "out_time": "10:15",
+      "in_time": "11:00",
+      "duration_minutes": 45.0,
+      "distance_km": 22.0,
+      "historical_avg_km": 30.0
+    },
+    "expected_flag": "normal",
+    "expected_node": "rule_based",
+    "description": "Normal urban travel at 29.33 km/h."
+  },
+  {
+    "id": "NORM_06",
+    "trip": {
+      "employee_name": "Karthik Raja",
+      "employee_id": "EMP106",
+      "bike_number": "TN-09-GG-6666",
+      "date": "2026-09-01",
+      "out_time": "16:00",
+      "in_time": "17:15",
+      "duration_minutes": 75.0,
+      "distance_km": 50.0,
+      "historical_avg_km": 60.0
+    },
+    "expected_flag": "normal",
+    "expected_node": "rule_based",
+    "description": "Longer field visit across town at 40 km/h."
+  },
+  {
+    "id": "NORM_07",
+    "trip": {
+      "employee_name": "Manoj Tiwari",
+      "employee_id": "EMP107",
+      "bike_number": "UP-32-HH-7777",
+      "date": "2026-09-01",
+      "out_time": "08:00",
+      "in_time": "08:40",
+      "duration_minutes": 40.0,
+      "distance_km": 18.0,
+      "historical_avg_km": 25.0
+    },
+    "expected_flag": "normal",
+    "expected_node": "rule_based",
+    "description": "Morning commute and customer visits at 27 km/h."
+  },
+  {
+    "id": "NORM_08",
+    "trip": {
+      "employee_name": "Sunita Rao",
+      "employee_id": "EMP108",
+      "bike_number": "TS-07-II-8888",
+      "date": "2026-09-01",
+      "out_time": "12:00",
+      "in_time": "12:20",
+      "duration_minutes": 20.0,
+      "distance_km": 5.5,
+      "historical_avg_km": 15.0
+    },
+    "expected_flag": "normal",
+    "expected_node": "rule_based",
+    "description": "Short local sprint at 16.5 km/h."
+  },
+  {
+    "id": "IMPOSS_01",
+    "trip": {
+      "employee_name": "Vikram Seth",
+      "employee_id": "EMP201",
+      "bike_number": "MH-01-JJ-9991",
+      "date": "2026-09-01",
+      "out_time": "10:00",
+      "in_time": "10:10",
+      "duration_minutes": 10.0,
+      "distance_km": 60.0,
+      "historical_avg_km": 30.0
+    },
+    "expected_flag": "suspicious",
+    "expected_node": "rule_based",
+    "description": "Impossible speed of 360 km/h (bullet train / GPS teleportation)."
+  },
+  {
+    "id": "IMPOSS_02",
+    "trip": {
+      "employee_name": "Rohit Gill",
+      "employee_id": "EMP202",
+      "bike_number": "DL-01-KK-9992",
+      "date": "2026-09-01",
+      "out_time": "11:00",
+      "in_time": "11:15",
+      "duration_minutes": 15.0,
+      "distance_km": 55.0,
+      "historical_avg_km": 25.0
+    },
+    "expected_flag": "suspicious",
+    "expected_node": "rule_based",
+    "description": "Impossible speed of 220 km/h."
+  },
+  {
+    "id": "IMPOSS_03",
+    "trip": {
+      "employee_name": "Alok Mishra",
+      "employee_id": "EMP203",
+      "bike_number": "UP-70-LL-9993",
+      "date": "2026-09-01",
+      "out_time": "14:00",
+      "in_time": "14:00",
+      "duration_minutes": 0.0,
+      "distance_km": 35.0,
+      "historical_avg_km": 20.0
+    },
+    "expected_flag": "suspicious",
+    "expected_node": "rule_based",
+    "description": "Zero duration with 35 km distance (instant teleportation fraud)."
+  },
+  {
+    "id": "IMPOSS_04",
+    "trip": {
+      "employee_name": "Nitin Gadkari",
+      "employee_id": "EMP204",
+      "bike_number": "MH-31-MM-9994",
+      "date": "2026-09-01",
+      "out_time": "18:00",
+      "in_time": "18:20",
+      "duration_minutes": 20.0,
+      "distance_km": 80.0,
+      "historical_avg_km": 40.0
+    },
+    "expected_flag": "suspicious",
+    "expected_node": "rule_based",
+    "description": "Impossible speed of 240 km/h."
+  },
+  {
+    "id": "IMPOSS_05",
+    "trip": {
+      "employee_name": "Harish Rawat",
+      "employee_id": "EMP205",
+      "bike_number": "UK-07-NN-9995",
+      "date": "2026-09-01",
+      "out_time": "19:00",
+      "in_time": "19:05",
+      "duration_minutes": 5.0,
+      "distance_km": 25.0,
+      "historical_avg_km": 15.0
+    },
+    "expected_flag": "suspicious",
+    "expected_node": "rule_based",
+    "description": "Impossible speed of 300 km/h (fake GPS injection)."
+  },
+  {
+    "id": "BORDER_01",
+    "trip": {
+      "employee_name": "Sameer Khan",
+      "employee_id": "EMP301",
+      "bike_number": "MH-12-OO-1001",
+      "date": "2026-09-01",
+      "out_time": "13:00",
+      "in_time": "14:00",
+      "duration_minutes": 60.0,
+      "distance_km": 72.0,
+      "historical_avg_km": 65.0
+    },
+    "expected_flag": "normal",
+    "expected_node": "llm_reasoning",
+    "description": "Daytime Mumbai-Pune Expressway highway ride at 72 km/h."
+  },
+  {
+    "id": "BORDER_02",
+    "trip": {
+      "employee_name": "Gaurav Sen",
+      "employee_id": "EMP302",
+      "bike_number": "KA-03-PP-1002",
+      "date": "2026-09-01",
+      "out_time": "02:00",
+      "in_time": "02:45",
+      "duration_minutes": 45.0,
+      "distance_km": 85.0,
+      "historical_avg_km": 20.0
+    },
+    "expected_flag": "suspicious",
+    "expected_node": "llm_reasoning",
+    "description": "Late-night 2:00 AM trip at 113.3 km/h with 4x historical average."
+  },
+  {
+    "id": "BORDER_03",
+    "trip": {
+      "employee_name": "Tina D'Souza",
+      "employee_id": "EMP303",
+      "bike_number": "GA-01-QQ-1003",
+      "date": "2026-09-01",
+      "out_time": "11:00",
+      "in_time": "12:00",
+      "duration_minutes": 60.0,
+      "distance_km": 68.0,
+      "historical_avg_km": 70.0
+    },
+    "expected_flag": "normal",
+    "expected_node": "llm_reasoning",
+    "description": "Plausible highway delivery route at 68 km/h."
+  },
+  {
+    "id": "BORDER_04",
+    "trip": {
+      "employee_name": "Pawan Kalyan",
+      "employee_id": "EMP304",
+      "bike_number": "AP-09-RR-1004",
+      "date": "2026-09-01",
+      "out_time": "17:00",
+      "in_time": "17:30",
+      "duration_minutes": 30.0,
+      "distance_km": 65.0,
+      "historical_avg_km": 25.0
+    },
+    "expected_flag": "suspicious",
+    "expected_node": "llm_reasoning",
+    "description": "130 km/h in evening rush hour (likely car ride charged as bike)."
+  },
+  {
+    "id": "BORDER_05",
+    "trip": {
+      "employee_name": "Vijay Shankar",
+      "employee_id": "EMP305",
+      "bike_number": "TN-01-SS-1005",
+      "date": "2026-09-01",
+      "out_time": "15:00",
+      "in_time": "16:00",
+      "duration_minutes": 60.0,
+      "distance_km": 78.0,
+      "historical_avg_km": 75.0
+    },
+    "expected_flag": "normal",
+    "expected_node": "llm_reasoning",
+    "description": "Outer ring road transit at 78 km/h matching historical pattern."
+  },
+  {
+    "id": "BORDER_06",
+    "trip": {
+      "employee_name": "Mohit Chauhan",
+      "employee_id": "EMP306",
+      "bike_number": "HP-01-TT-1006",
+      "date": "2026-09-01",
+      "out_time": "23:00",
+      "in_time": "23:40",
+      "duration_minutes": 40.0,
+      "distance_km": 70.0,
+      "historical_avg_km": 15.0
+    },
+    "expected_flag": "suspicious",
+    "expected_node": "llm_reasoning",
+    "description": "Late night mountain route at 105 km/h (dangerously unrealistic)."
+  },
+  {
+    "id": "DWELL_01",
+    "trip": {
+      "employee_name": "Arjun Rampal",
+      "employee_id": "EMP401",
+      "bike_number": "MH-04-UU-2001",
+      "date": "2026-09-01",
+      "out_time": "10:00",
+      "in_time": "11:00",
+      "duration_minutes": 60.0,
+      "distance_km": 12.0,
+      "coordinates_log": [
+        {
+          "latitude": 19.076,
+          "longitude": 72.8777
+        },
+        {
+          "latitude": 19.076,
+          "longitude": 72.8777
+        },
+        {
+          "latitude": 19.076,
+          "longitude": 72.8777
+        }
+      ]
+    },
+    "expected_flag": "suspicious",
+    "expected_node": "rule_based",
+    "description": "GPS dwell spoofing: Static lat/long for 60 mins while claiming 12 km distance."
+  },
+  {
+    "id": "DWELL_02",
+    "trip": {
+      "employee_name": "Karan Johar",
+      "employee_id": "EMP402",
+      "bike_number": "MH-02-VV-2002",
+      "date": "2026-09-01",
+      "out_time": "14:00",
+      "in_time": "15:30",
+      "duration_minutes": 90.0,
+      "distance_km": 25.0,
+      "coordinates_log": [
+        {
+          "latitude": 28.7041,
+          "longitude": 77.1025
+        },
+        {
+          "latitude": 28.7041,
+          "longitude": 77.1025
+        }
+      ]
+    },
+    "expected_flag": "suspicious",
+    "expected_node": "rule_based",
+    "description": "Static dwell coordinates for 90 mins with 25 km distance."
+  },
+  {
+    "id": "DWELL_03",
+    "trip": {
+      "employee_name": "Fatima Sana",
+      "employee_id": "EMP403",
+      "bike_number": "RJ-14-WW-2003",
+      "date": "2026-09-01",
+      "out_time": "09:00",
+      "in_time": "09:30",
+      "duration_minutes": 30.0,
+      "distance_km": 10.0,
+      "coordinates_log": [
+        {
+          "latitude": 26.9124,
+          "longitude": 75.7873
+        },
+        {
+          "latitude": 26.92,
+          "longitude": 75.795
+        },
+        {
+          "latitude": 26.93,
+          "longitude": 75.805
+        }
+      ]
+    },
+    "expected_flag": "normal",
+    "expected_node": "rule_based",
+    "description": "Legitimate moving breadcrumbs across city."
+  },
+  {
+    "id": "DWELL_04",
+    "trip": {
+      "employee_name": "Lata Mangeshkar",
+      "employee_id": "EMP404",
+      "bike_number": "MH-01-XX-2004",
+      "date": "2026-09-01",
+      "out_time": "11:00",
+      "in_time": "11:45",
+      "duration_minutes": 45.0,
+      "distance_km": 16.0,
+      "coordinates_log": [
+        {
+          "latitude": 18.5204,
+          "longitude": 73.8567
+        },
+        {
+          "latitude": 18.53,
+          "longitude": 73.865
+        },
+        {
+          "latitude": 18.545,
+          "longitude": 73.88
+        }
+      ]
+    },
+    "expected_flag": "normal",
+    "expected_node": "rule_based",
+    "description": "Valid moving trip in Pune city."
+  }
+]

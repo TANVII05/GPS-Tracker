@@ -14,6 +14,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { COLORS, FONTS, FONT_SIZES, SPACING, RADIUS, SHADOWS } from '../../constants/theme';
 import { fetchAllTrips, fetchActiveLocations } from '../../services/googleSheetsService';
 import { formatKM, formatEarnings, getMonthName } from '../../utils/formatters';
+import AIAssistantModal from '../../components/AIAssistantModal';
 
 export default function AdminOverviewScreen() {
   const [loading, setLoading] = useState(true);
@@ -21,6 +22,7 @@ export default function AdminOverviewScreen() {
   const [error, setError] = useState(null);
   const [expandedTrip, setExpandedTrip] = useState(null);
   const [activeLocations, setActiveLocations] = useState([]);
+  const [aiModalVisible, setAiModalVisible] = useState(false);
   
   const [stats, setStats] = useState({
     todayTrips: 0,
@@ -246,11 +248,40 @@ export default function AdminOverviewScreen() {
           <>
             {/* Greeting Header */}
             <View style={styles.greetingHeader}>
-              <Text style={styles.greetingTitle}>Good {today.getHours() < 12 ? 'Morning' : today.getHours() < 17 ? 'Afternoon' : 'Evening'}, Admin 👋</Text>
-              <Text style={styles.greetingDate}>
-                {today.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
-              </Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.greetingTitle}>Good {today.getHours() < 12 ? 'Morning' : today.getHours() < 17 ? 'Afternoon' : 'Evening'}, Admin 👋</Text>
+                  <Text style={styles.greetingDate}>
+                    {today.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+                  </Text>
+                </View>
+                <TouchableOpacity 
+                  style={styles.aiOverviewBtn}
+                  onPress={() => setAiModalVisible(true)}
+                >
+                  <Ionicons name="sparkles" size={14} color="#FFFFFF" />
+                  <Text style={styles.aiOverviewBtnText}>Ask AI</Text>
+                </TouchableOpacity>
+              </View>
             </View>
+
+            {/* AI Assistant Quick Card */}
+            <TouchableOpacity 
+              style={styles.aiQuickCard}
+              onPress={() => setAiModalVisible(true)}
+              activeOpacity={0.8}
+            >
+              <View style={styles.aiQuickLeft}>
+                <View style={styles.aiQuickIcon}>
+                  <Ionicons name="sparkles" size={16} color="#FFFFFF" />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.aiQuickTitle}>AI Travel Assistant</Text>
+                  <Text style={styles.aiQuickSub}>Ask plain-English questions about trips, anomalies & payouts</Text>
+                </View>
+              </View>
+              <Ionicons name="chevron-forward" size={18} color="#333788" />
+            </TouchableOpacity>
 
             {/* Stats Grid */}
             <View style={styles.statsGrid}>
@@ -313,6 +344,12 @@ export default function AdminOverviewScreen() {
           </View>
         }
       />
+
+      {/* Interactive AI Assistant Modal */}
+      <AIAssistantModal
+        visible={aiModalVisible}
+        onClose={() => setAiModalVisible(false)}
+      />
     </SafeAreaView>
   );
 }
@@ -330,6 +367,56 @@ const styles = StyleSheet.create({
   listContent: {
     padding: SPACING.base,
     paddingBottom: SPACING.xxxl,
+  },
+  aiOverviewBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: RADIUS.sm,
+    gap: 4,
+  },
+  aiOverviewBtnText: {
+    color: '#FFFFFF',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  aiQuickCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#FFFFFF',
+    borderRadius: RADIUS.card,
+    padding: SPACING.base,
+    marginBottom: SPACING.lg,
+    borderWidth: 1,
+    borderColor: '#dcdffa',
+    ...SHADOWS.card,
+  },
+  aiQuickLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+    gap: 12,
+  },
+  aiQuickIcon: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: '#333788',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  aiQuickTitle: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#1a1a2e',
+  },
+  aiQuickSub: {
+    fontSize: 11,
+    color: '#5c5f8a',
+    marginTop: 2,
   },
   greetingHeader: {
     backgroundColor: COLORS.primary,

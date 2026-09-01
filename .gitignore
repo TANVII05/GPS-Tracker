@@ -1,17 +1,49 @@
+# ── Node / Expo ──────────────────────────────────────────────────────────────
 node_modules/
 .expo/
 dist/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+web-build/
+
+# ── Environment variables ─────────────────────────────────────────────────────
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+
+# ── Native build artifacts ────────────────────────────────────────────────────
 ios/build/
 android/build/
+android/.gradle/
 *.jks
 *.p12
 *.key
 *.mobileprovision
+
+# ── Python / AI Service ───────────────────────────────────────────────────────
+ai-service/__pycache__/
+ai-service/**/__pycache__/
+ai-service/.pytest_cache/
+ai-service/**/*.pyc
+ai-service/*.egg-info/
+ai-service/.venv/
+ai-service/venv/
+ai-service/.env
+
+# ── Google Service Account credentials (NEVER commit) ────────────────────────
+*.json.key
+service_account*.json
+google_credentials*.json
+credentials.json
+
+# ── OS files ──────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ── Editor ────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp

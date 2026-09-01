@@ -1,92 +1,246 @@
-# 🗺️ NCH GPS Tracker App
+# 🛵 NCH GPS Tracker
 
-A robust, serverless React Native mobile application built for field teams. This app tracks employee travel routes in the background, automatically calculates exact distances using GPS coordinates, and calculates financial reimbursements in real-time. 
+A full-stack **employee field mobility tracking** system with real-time GPS, AI-powered anomaly detection, and a natural language query assistant.
 
-Instead of relying on expensive backend infrastructure like AWS or Firebase, this project creatively uses **Google Apps Script** and **Google Sheets** as a 100% free, scalable backend database.
-
----
-
-## ✨ Why this exists
-
-Managing field staff travel logs is notoriously difficult. Paper logs are inaccurate, and commercial GPS tracking software is often expensive and overly complex. 
-
-This app was built to solve that problem with a focus on **simplicity and zero running costs**. It gives employees a dead-simple interface to "Start Trip" and "End Trip", while giving administrators a powerful live-tracking dashboard to monitor exactly who is on the road, where they are, and exactly how much they need to be reimbursed based on dynamic per-kilometer rates.
+Built with **React Native (Expo)** on the frontend and **Python FastAPI + LangGraph + LangChain** on the backend.
 
 ---
 
-## 📱 Key Features
+## 📱 Screenshots
 
-### 👨‍💼 For Employees (Field Staff)
-- **One-Tap Tracking:** Start and stop trips with a single tap.
-- **Background GPS:** Uses `expo-location` and `expo-task-manager` to accurately track coordinates even when the phone is locked or the app is minimized.
-- **Live Earnings Calculation:** Dynamically calculates the distance traveled (using the Haversine formula) and multiplies it by the company's current Per-KM rate to show exact earnings in real-time.
-- **Offline Resilience:** If a trip ends in a dead zone (like an underground parking garage), the trip payload is queued in `AsyncStorage` and automatically synced to the cloud the next time the app opens with a network connection.
-
-### 🛡️ For Administrators
-- **Hidden Admin Portal:** Secure login portal to access company-wide data.
-- **Live Tracking Dashboard:** View exactly who is riding right now, updated automatically every 30 seconds.
-- **Trip History & Analytics:** View all historical trips across the entire company, with total payout and distance summaries.
-- **Dynamic Rate Control:** Change the global reimbursement rate (e.g., from ₹4.00/km to ₹10.00/km) from the app. The new rate is instantly applied to all employee devices globally.
+| Admin Overview | Trip History | AI Assistant |
+|:-:|:-:|:-:|
+| Real-time stats & AI quick card | AI-flagged trips with badges | Ask plain-English questions |
 
 ---
 
-## 🛠️ Tech Stack & Architecture
+## ✨ Features
 
-This project is built to be lightweight, maintainable, and cost-effective.
+### 🗺️ Core GPS Tracking
+- **Live GPS tracking** during active trips with real-time distance (haversine calculation)
+- **Employee login & dashboard** with trip history
+- **Admin dashboard** with overview stats, all-employee trip history, and PDF export
+- **Google Sheets sync** via Apps Script (optional — works fully offline too)
 
-*   **Frontend Framework:** React Native (Expo)
-*   **Navigation:** React Navigation (Stack & Bottom Tabs)
-*   **State Management:** React Hooks & Context API
-*   **Local Storage:** `@react-native-async-storage/async-storage`
-*   **Data Visualization:** `react-native-chart-kit`
-*   **Backend Backend:** Google Apps Script (Serverless REST API)
-*   **Database:** Google Sheets
+### 🤖 AI-Powered Backend (Python)
 
-### 🧠 The "Google Sheets as a Database" Magic
-By deploying a custom Google Apps Script (`doPost` and `doGet`), the Google Sheet is transformed into a RESTful API. 
-1. The app sends a JSON payload to the Apps Script URL.
-2. The script parses the action (e.g., `save_trip`, `update_location`, `update_settings`).
-3. The script sanitizes the data and injects it into specific tabs (*Active Locations*, *Trips*, *Employees*, *Settings*) within the Google Spreadsheet. 
+| Feature | Technology | What it does |
+|---|---|---|
+| **Anomaly Detection** | LangGraph (2-node state graph) | Auto-clears normal trips, flags suspicious speeds instantly via rule-based check — routes borderline cases to LLM for reasoning |
+| **Escalation Engine** | FastAPI + gspread | Writes `auto_cleared` / `needs_manager_review` status back to Google Sheets |
+| **NL Query Layer** | LangChain + OpenAI | Lets admins ask plain-English questions like *"Which trips this month look suspicious?"* with full source-row traceability |
 
-This means **HR and Accounting teams can view the raw database just by opening a Google Sheet**, without needing a custom web dashboard!
+### 📊 Admin Panel
+- **AI Anomaly Badges** — 🔴 Needs Review / 🟢 Auto-Cleared on each trip card
+- **Run AI Scan** — One-tap batch anomaly analysis across all trips
+- **Ask AI** — Conversational query modal with token usage & latency telemetry
+- **Month / Employee / Status filters** — Slice and dice trip data
+- **PDF Export** — Generate formatted trip reports
+
+---
+
+## 🏗️ Architecture
+
+```
+┌─────────────────────────────────┐      ┌─────────────────────────────────┐
+│     React Native App (Expo)     │      │    Python AI Service (FastAPI)  │
+│                                 │      │                                 │
+│  screens/admin/                 │ HTTP │  /api/v1/anomaly/detect         │
+│    AdminOverviewScreen.js  ─────┼──────▶  /api/v1/sheets/process-trips  │
+│    AdminTripsScreen.js          │      │  /api/v1/query                  │
+│                                 │      │  /health                        │
+│  components/                    │      │                                 │
+│    AIAssistantModal.js          │      │  LangGraph Anomaly Detection    │
+│                                 │      │    Node 1: Rule-Based Check     │
+│  services/                      │      │    Node 2: LLM Reasoning        │
+│    aiService.js ─────────────── ┼──────▶                                │
+│    googleSheetsService.js       │      │  LangChain NL Query             │
+│                                 │      │    Filter Extraction            │
+│  utils/                         │      │    Row Retrieval                │
+│    storage.js (AsyncStorage)    │      │    Answer Synthesis             │
+│    haversine.js                 │      │                                 │
+└─────────────────────────────────┘      └────────────────┬────────────────┘
+                                                          │
+                                                ┌─────────▼────────┐
+                                                │   Google Sheets   │
+                                                │  (optional sync)  │
+                                                └──────────────────┘
+```
 
 ---
 
 ## 🚀 Getting Started
 
-If you want to run this project locally, follow these steps:
+### Prerequisites
+- Node.js 18+
+- Python 3.10+
+- Expo CLI (`npm install -g expo-cli`)
+- An iPhone or Android device on the same Wi-Fi network, OR Expo Go
 
-### 1. Clone the repository
+---
+
+### 1️⃣ Clone the repo
+
 ```bash
-git clone https://github.com/your-username/nch-gps-tracker.git
-cd nch-gps-tracker
+git clone https://github.com/TANVII05/GPS-Tracker.git
+cd GPS-Tracker
 ```
 
-### 2. Install dependencies
+---
+
+### 2️⃣ Run the React Native App
+
 ```bash
 npm install
-# or
-yarn install
 ```
 
-### 3. Setup your Google Sheet Backend
-1. Create a new Google Sheet.
-2. Create four tabs: `Trips`, `Active Locations`, `Employees`, `Settings`.
-3. Go to **Extensions > Apps Script** and paste the code found in `GoogleAppsScript.js` (located in the root of this repo).
-4. In `GoogleAppsScript.js`, change `YOUR_SECRET_KEY_HERE` to a random secure string.
-5. Click **Deploy > New Deployment**, select "Web App", set access to "Anyone", and copy the generated Web App URL.
-
-### 4. Configure the App Environment
-Create a `.env` file in the root of the app directory and add your credentials:
-```env
-EXPO_PUBLIC_ADMIN_USERNAME=admin
-EXPO_PUBLIC_ADMIN_PASSWORD=your_secure_password
-EXPO_PUBLIC_GOOGLE_SHEETS_URL=YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE
-EXPO_PUBLIC_SECRET_KEY=YOUR_SECRET_KEY_HERE
+**On Windows (cmd):**
+```cmd
+set EXPO_NO_DEPENDENCY_VALIDATION=1
+set REACT_NATIVE_PACKAGER_HOSTNAME=<YOUR_LAN_IP>
+npx expo start --lan --port 8081
 ```
 
-### 5. Run the App
+Open Safari / Chrome on your phone and go to `http://<YOUR_LAN_IP>:8081`
+
+> **Default credentials:**
+> - Admin: `admin` / `admin`
+> - Employee: register via the Sign Up screen
+
+---
+
+### 3️⃣ Run the AI Backend (Optional — enables AI features)
+
 ```bash
-npx expo start
+cd ai-service
+pip install -r requirements.txt
 ```
-Scan the QR code with the Expo Go app on your physical device (Note: Background GPS tracking works best on physical devices, not emulators).
+
+Copy the example env file and fill in your keys:
+```bash
+cp .env.example .env
+```
+
+Start the server:
+```bash
+python -m uvicorn main:app --host 0.0.0.0 --port 8000
+```
+
+Verify it's running by opening `http://<YOUR_LAN_IP>:8000/health` — should return `{"status":"healthy"}`.
+
+> **Without the AI backend:** The app still works fully. Trip scanning and AI queries fall back to fast local heuristics automatically.
+
+---
+
+### 4️⃣ Environment Variables
+
+#### React Native (`.env` in root)
+```env
+EXPO_PUBLIC_AI_SERVICE_URL=http://<YOUR_LAN_IP>:8000
+EXPO_PUBLIC_GOOGLE_SHEETS_URL=          # optional
+```
+
+#### Python AI Service (`ai-service/.env`)
+```env
+OPENAI_API_KEY=your_openai_key_here     # optional — enables LLM reasoning
+GOOGLE_SHEET_ID=                        # optional — enables Sheets sync
+GOOGLE_SERVICE_ACCOUNT_FILE=service_account.json   # optional
+```
+
+> The AI backend runs fully without any API keys — it uses a deterministic rule-based fallback for all anomaly detection and NL queries.
+
+---
+
+## 📂 Project Structure
+
+```
+NCH-GPS-Tracker/
+├── screens/
+│   ├── admin/
+│   │   ├── AdminOverviewScreen.js   # Overview stats, AI quick card
+│   │   └── AdminTripsScreen.js      # Trip list, AI scan, filters
+│   ├── DashboardScreen.js           # Employee live trip tracking
+│   └── LoginScreen.js
+├── components/
+│   └── AIAssistantModal.js          # AI query modal with telemetry
+├── services/
+│   ├── aiService.js                 # FastAPI client + offline fallback
+│   └── googleSheetsService.js       # Sheets sync client
+├── utils/
+│   ├── storage.js                   # AsyncStorage trip CRUD
+│   └── haversine.js                 # GPS distance calculation
+├── ai-service/                      # Python FastAPI AI Backend
+│   ├── main.py                      # FastAPI app & endpoints
+│   ├── schemas.py                   # Pydantic data models
+│   ├── sheets_client.py             # gspread wrapper + mock mode
+│   ├── config.py                    # Centralised settings
+│   ├── anomaly_detection/
+│   │   ├── graph.py                 # LangGraph 2-node state graph
+│   │   ├── rules.py                 # Speed-based rule checks
+│   │   └── state.py                 # LangGraph TypedDict state
+│   ├── escalation/
+│   │   └── manager.py               # Batch escalation to Sheets
+│   ├── nl_query/
+│   │   ├── chain.py                 # LangChain retrieval chain
+│   │   └── filter_extractor.py      # NL → structured filters
+│   ├── eval/
+│   │   ├── test_dataset.json        # 23 labelled test trips
+│   │   └── run_eval.py              # Eval harness (100% accuracy)
+│   ├── requirements.txt
+│   └── .env.example
+└── GoogleAppsScript.js              # Apps Script for Sheets sync
+```
+
+---
+
+## 🧪 Running the Evaluation Harness
+
+The AI anomaly detection system has been validated against 23 labelled test cases:
+
+```bash
+cd ai-service
+python -m eval.run_eval
+```
+
+**Results:**
+```
+Total Test Cases : 23
+Overall Accuracy : 100.0% (23/23)
+Rule-Based Node  : 17 cases (73.9%)  ← 0ms LLM latency, $0 cost
+LLM Reasoning    : 6 cases  (26.1%)  ← contextual reasoning
+```
+
+---
+
+## 🔌 AI Backend API Reference
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/health` | Service health check |
+| `POST` | `/api/v1/anomaly/detect` | Analyze a single trip for anomalies |
+| `POST` | `/api/v1/sheets/process-trips` | Batch scan all trips |
+| `POST` | `/api/v1/query` | Ask a natural language question |
+| `GET` | `/api/v1/eval/run` | Run the evaluation harness |
+
+Interactive API docs available at `http://localhost:8000/docs` when the server is running.
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Mobile App | React Native, Expo |
+| State | React Hooks, AsyncStorage |
+| GPS | expo-location / Browser Geolocation |
+| AI Backend | Python, FastAPI, Uvicorn |
+| Anomaly Detection | LangGraph (state graph) |
+| NL Query | LangChain, OpenAI |
+| Sheets Sync | gspread, Google Sheets API |
+| Data Validation | Pydantic v2 |
+
+---
+
+## 📄 License
+
+MIT License — feel free to use and adapt.
